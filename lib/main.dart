@@ -2,10 +2,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vibbra_test/controllers/auth_controller.dart';
+import 'package:vibbra_test/controllers/company_controller.dart';
+import 'package:vibbra_test/controllers/home_controller.dart';
 import 'package:vibbra_test/firebase_options.dart';
 import 'package:vibbra_test/utils/routes.dart';
 import 'package:vibbra_test/views/auth/signin_dart.dart';
 import 'package:vibbra_test/views/home_page.dart';
+import 'package:vibbra_test/views/register_company_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,7 +16,11 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(MultiProvider(
-    providers: [ChangeNotifierProvider(create: (_) => AuthController())],
+    providers: [
+      ChangeNotifierProvider(create: (_) => AuthController()),
+      ChangeNotifierProvider(create: (_) => HomeController()),
+      ChangeNotifierProvider(create: (_) => CompanyController())
+    ],
     child: const MyApp(),
   ));
 }
@@ -33,6 +40,7 @@ class MyApp extends StatelessWidget {
       routes: {
         Routes.home: (context) => const HomePage(),
         Routes.signIn: (context) => const SignInPage(),
+        Routes.registerCompany: ((context) => const RegisterCompanyPage())
       },
     );
   }
