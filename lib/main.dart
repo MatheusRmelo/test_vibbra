@@ -8,6 +8,7 @@ import 'package:vibbra_test/firebase_options.dart';
 import 'package:vibbra_test/utils/routes.dart';
 import 'package:vibbra_test/views/auth/signin_dart.dart';
 import 'package:vibbra_test/views/home_page.dart';
+import 'package:vibbra_test/views/preferences_page.dart';
 import 'package:vibbra_test/views/register_company_page.dart';
 
 void main() async {
@@ -40,7 +41,8 @@ class MyApp extends StatelessWidget {
       routes: {
         Routes.home: (context) => const HomePage(),
         Routes.signIn: (context) => const SignInPage(),
-        Routes.registerCompany: ((context) => const RegisterCompanyPage())
+        Routes.registerCompany: ((context) => const RegisterCompanyPage()),
+        Routes.preferences: (context) => const PreferencesPage(),
       },
     );
   }
