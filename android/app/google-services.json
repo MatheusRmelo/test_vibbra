@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "739758999902",
+    "project_id": "vibbra-f4822",
+    "storage_bucket": "vibbra-f4822.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:739758999902:android:4208b10d02ef63dcfc27cf",
+        "android_client_info": {
+          "package_name": "com.example.vibbra_test"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "739758999902-ijbr6sd7ljqhuaene8qbhhnougtkpa5s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBz3b5tD5pT8kIDawN8eWs-xwPpdJxQj4Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "739758999902-ijbr6sd7ljqhuaene8qbhhnougtkpa5s.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
