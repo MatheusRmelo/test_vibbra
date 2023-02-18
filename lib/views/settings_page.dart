@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:vibbra_test/views/partners/list_partners_page.dart';
 
-class PreferencesPage extends StatefulWidget {
-  const PreferencesPage({super.key});
+class SettingsPage extends StatefulWidget {
+  const SettingsPage({super.key});
 
   @override
-  State<PreferencesPage> createState() => _PreferencesPageState();
+  State<SettingsPage> createState() => _SettingsPageState();
 }
 
-class _PreferencesPageState extends State<PreferencesPage> {
+class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -35,7 +36,7 @@ class _PreferencesPageState extends State<PreferencesPage> {
               )),
           body: const TabBarView(
             children: [
-              Icon(Icons.directions_car),
+              ListPartnersPage(),
               Icon(Icons.directions_transit),
               Icon(Icons.directions_bike),
             ],

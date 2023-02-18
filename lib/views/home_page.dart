@@ -44,7 +44,7 @@ class _HomePageState extends State<HomePage> {
         IconButton(onPressed: () {}, icon: Icon(Icons.restore)),
         IconButton(
             onPressed: () {
-              Navigator.pushNamed(context, Routes.preferences);
+              Navigator.pushNamed(context, Routes.settings);
             },
             icon: Icon(Icons.settings)),
       ], title: const Text("Home")),
