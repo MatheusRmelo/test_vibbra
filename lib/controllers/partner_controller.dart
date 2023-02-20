@@ -14,13 +14,15 @@ class PartnerController extends ChangeNotifier {
           fromFirestore: ((snapshot, options) =>
               Partner.fromJson(snapshot.data()!, snapshot.id)),
           toFirestore: (partner, _) => partner.toJson());
-  bool _isLoading = false;
+  bool _isLoading = true;
+  bool _isLoadingBtn = false;
   List<Error> _errors = [];
   List<Partner> _partners = [];
   int _isDeletingIndex = -1;
   Partner? _partnerEditing;
 
   bool get isLoading => _isLoading;
+  bool get isLoadingBtn => _isLoadingBtn;
   List<Error> get errors => _errors;
   List<Partner> get partners => _partners;
   int get isDeletingIndex => _isDeletingIndex;
@@ -32,8 +34,6 @@ class PartnerController extends ChangeNotifier {
   }
 
   Future<void> getPartners() async {
-    _isLoading = true;
-    notifyListeners();
     var partnersListFirestore = await _partnersCollection.get();
     _partners =
         partnersListFirestore.docs.map((element) => element.data()).toList();
@@ -66,7 +66,7 @@ class PartnerController extends ChangeNotifier {
       return false;
     }
 
-    _isLoading = true;
+    _isLoadingBtn = true;
     notifyListeners();
     try {
       if (_partnerEditing != null) {
@@ -84,7 +84,7 @@ class PartnerController extends ChangeNotifier {
     } catch (e) {
       errors.add(Error(code: 'general|failed', message: e.toString()));
     } finally {
-      _isLoading = false;
+      _isLoadingBtn = false;
       notifyListeners();
     }
 

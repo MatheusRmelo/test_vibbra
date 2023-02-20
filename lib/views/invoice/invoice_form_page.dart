@@ -2,25 +2,45 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:vibbra_test/controllers/company_controller.dart';
+import 'package:vibbra_test/controllers/invoice_controller.dart';
 import 'package:vibbra_test/controllers/partner_controller.dart';
 import 'package:vibbra_test/models/company.dart';
+import 'package:vibbra_test/models/invoice.dart';
 import 'package:vibbra_test/models/partner.dart';
 import 'package:vibbra_test/utils/inputs_formatters/cnpj_input_formatter.dart';
 import 'package:vibbra_test/utils/inputs_formatters/phone_input_formatter.dart';
+import 'package:vibbra_test/views/widgets/custom_dropdown_textfield.dart';
 import 'package:vibbra_test/views/widgets/custom_outlined_textfield.dart';
 import 'package:vibbra_test/models/error.dart';
 
-class FormPartnerPage extends StatefulWidget {
-  const FormPartnerPage({super.key});
+class InvoiceFormPage extends StatefulWidget {
+  const InvoiceFormPage({super.key});
 
   @override
-  State<FormPartnerPage> createState() => _FormPartnerPageState();
+  State<InvoiceFormPage> createState() => _InvoiceFormPageState();
 }
 
-class _FormPartnerPageState extends State<FormPartnerPage> {
-  TextEditingController nameController = TextEditingController();
-  TextEditingController documentController = TextEditingController();
-  TextEditingController socialReason = TextEditingController();
+class _InvoiceFormPageState extends State<InvoiceFormPage> {
+  TextEditingController valueController = TextEditingController();
+  TextEditingController numberController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
+  TextEditingController monthController = TextEditingController();
+  TextEditingController receiveDateController = TextEditingController();
+  List<String> months = [
+    "Janeiro",
+    "Feveiro",
+    "Março",
+    "Abril",
+    "Main",
+    "Junho",
+    "Julho",
+    "Agosto",
+    "Setembro",
+    "Outubro",
+    "Novembro",
+    "Dezembro"
+  ];
+  String month = "Janeiro";
   bool _isEditing = false;
 
   @override
@@ -30,9 +50,9 @@ class _FormPartnerPageState extends State<FormPartnerPage> {
     if (controller.partnerEditing != null && mounted) {
       setState(() {
         _isEditing = true;
-        nameController.text = controller.partnerEditing!.name;
-        documentController.text = controller.partnerEditing!.document;
-        socialReason.text = controller.partnerEditing!.socialReason;
+        valueController.text = controller.partnerEditing!.name;
+        numberController.text = controller.partnerEditing!.document;
+        //descriptionController.text = controller.partnerEditing!.descriptionController;
       });
     }
   }
@@ -42,45 +62,58 @@ class _FormPartnerPageState extends State<FormPartnerPage> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
+        title: const Text("Lançamento de nota fiscal"),
       ),
       body: Container(
         padding: const EdgeInsets.all(16),
         child: SingleChildScrollView(
-          child: Consumer<PartnerController>(
+          child: Consumer<InvoiceController>(
             builder: ((context, controller, child) => Column(
                   children: [
                     Container(
                         margin: const EdgeInsets.only(bottom: 32),
                         padding: const EdgeInsets.only(top: 16),
-                        child: Text(
-                            "${_isEditing ? 'Edite' : 'Cadastrar'} uma empresa parceira",
-                            style: const TextStyle(fontSize: 24))),
+                        child: const Text("Informações da nota fiscal",
+                            style: TextStyle(fontSize: 24))),
                     CustomOutlinedTextField(
-                        controller: documentController,
-                        prefixIcon: const Icon(Icons.business),
-                        label: "CNPJ",
+                        controller: valueController,
+                        prefixIcon: const Icon(Icons.attach_money),
+                        label: "Valor da nota",
                         inputFormatters: <TextInputFormatter>[
                           FilteringTextInputFormatter.digitsOnly,
-                          CnpjInputFormatter()
                         ],
                         keyboardType: TextInputType.number,
-                        placeholder: "Digite o seu CNPJ",
-                        errors: controller.errors.errorsByCode("document")),
+                        placeholder: "Digite o valor da nota",
+                        errors: controller.errors.errorsByCode("value")),
                     Container(
                         margin: const EdgeInsets.symmetric(vertical: 16),
                         child: CustomOutlinedTextField(
-                            controller: nameController,
-                            prefixIcon: const Icon(Icons.badge),
-                            label: "Nome da empresa",
-                            placeholder: "Digite o nome da empresa",
-                            errors: controller.errors.errorsByCode("name"))),
+                            controller: numberController,
+                            prefixIcon: const Icon(Icons.numbers),
+                            label: "Número da nota fiscal",
+                            placeholder: "Digite o número da nota fiscal",
+                            errors: controller.errors.errorsByCode("number"))),
                     CustomOutlinedTextField(
-                        controller: socialReason,
+                        controller: descriptionController,
                         prefixIcon: const Icon(Icons.feed),
-                        label: "Razão social",
-                        placeholder: "Digite a razão social",
-                        errors:
-                            controller.errors.errorsByCode("social_reason")),
+                        label: "Descrição do serviço prestado",
+                        placeholder: "Digite a descrição do serviço prestado",
+                        errors: controller.errors.errorsByCode("description")),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    CustomDropdownTextField(
+                      label: 'Mês de competência',
+                      list: months,
+                      value: month,
+                      onChanged: (String? value) {
+                        if (value != null) {
+                          setState(() {
+                            month = value;
+                          });
+                        }
+                      },
+                    ),
                     Container(
                         width: double.infinity,
                         height: 48,
@@ -90,10 +123,16 @@ class _FormPartnerPageState extends State<FormPartnerPage> {
                                 ? null
                                 : () {
                                     controller
-                                        .submit(Partner(
-                                            name: nameController.text,
-                                            document: documentController.text,
-                                            socialReason: socialReason.text))
+                                        .submit(Invoice(
+                                            company: controller.partner,
+                                            value: double.parse(
+                                                valueController.text),
+                                            number: int.parse(
+                                                numberController.text),
+                                            month: month,
+                                            receiveDate: "02/20/2023",
+                                            description:
+                                                descriptionController.text))
                                         .then((value) {
                                       if (value) {
                                         Navigator.pop(context);
@@ -121,7 +160,7 @@ class _FormPartnerPageState extends State<FormPartnerPage> {
                                                 TextStyle(color: Colors.white))
                                       ])
                                 : Text(
-                                    "${_isEditing ? 'EDITAR' : 'CADASTRAR'} EMPRESA PARCEIRA")))
+                                    "${_isEditing ? 'EDITAR' : 'LANÇAR'} NOTA FISCAL")))
                   ],
                 )),
           ),

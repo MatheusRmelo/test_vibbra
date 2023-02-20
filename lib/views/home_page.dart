@@ -61,7 +61,9 @@ class _HomePageState extends State<HomePage> {
         secondaryIconsList: [Icons.note_add, Icons.payment],
         secondaryIconsText: ["Lançar Nota Fiscal", "Lançar Despesa"],
         secondaryIconsOnPress: [
-          () => {},
+          () {
+            Navigator.pushNamed(context, Routes.invoiceCompany);
+          },
           () => {},
         ],
       ),

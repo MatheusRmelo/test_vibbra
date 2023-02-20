@@ -5,6 +5,7 @@ import 'package:vibbra_test/controllers/auth_controller.dart';
 import 'package:vibbra_test/controllers/company_controller.dart';
 import 'package:vibbra_test/controllers/expense_category_controller.dart';
 import 'package:vibbra_test/controllers/home_controller.dart';
+import 'package:vibbra_test/controllers/invoice_controller.dart';
 import 'package:vibbra_test/controllers/partner_controller.dart';
 import 'package:vibbra_test/controllers/settings_controller.dart';
 import 'package:vibbra_test/firebase_options.dart';
@@ -12,6 +13,8 @@ import 'package:vibbra_test/utils/routes.dart';
 import 'package:vibbra_test/views/auth/signin_dart.dart';
 import 'package:vibbra_test/views/expenses_categories/form_expense_category_page.dart';
 import 'package:vibbra_test/views/home_page.dart';
+import 'package:vibbra_test/views/invoice/invoice_company_page.dart';
+import 'package:vibbra_test/views/invoice/invoice_form_page.dart';
 import 'package:vibbra_test/views/partners/form_partner_page.dart';
 import 'package:vibbra_test/views/preferences_page.dart';
 import 'package:vibbra_test/views/register_company_page.dart';
@@ -28,7 +31,8 @@ void main() async {
       ChangeNotifierProvider(create: (_) => CompanyController()),
       ChangeNotifierProvider(create: (_) => PartnerController()),
       ChangeNotifierProvider(create: (_) => ExpenseCategoryController()),
-      ChangeNotifierProvider(create: (_) => SettingsController())
+      ChangeNotifierProvider(create: (_) => SettingsController()),
+      ChangeNotifierProvider(create: (_) => InvoiceController()),
     ],
     child: const MyApp(),
   ));
@@ -54,6 +58,8 @@ class MyApp extends StatelessWidget {
         Routes.partnersForm: (context) => const FormPartnerPage(),
         Routes.expensesCategoriesForm: (context) =>
             const FormExpenseCategoryPage(),
+        Routes.invoiceCompany: (context) => const InvoiceCompanyPage(),
+        Routes.invoiceForm: (context) => const InvoiceFormPage()
       },
     );
   }

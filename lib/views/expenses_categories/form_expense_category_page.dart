@@ -80,7 +80,7 @@ class _FormExpenseCategoryPageState extends State<FormExpenseCategoryPage> {
                         height: 48,
                         margin: const EdgeInsets.only(top: 40),
                         child: ElevatedButton(
-                            onPressed: controller.isLoading
+                            onPressed: controller.isLoadingBtn
                                 ? null
                                 : () {
                                     controller
@@ -95,7 +95,7 @@ class _FormExpenseCategoryPageState extends State<FormExpenseCategoryPage> {
                                       }
                                     });
                                   },
-                            child: controller.isLoading
+                            child: controller.isLoadingBtn
                                 ? Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     crossAxisAlignment:

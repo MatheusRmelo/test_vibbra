@@ -15,6 +15,13 @@ class ListExpensesCategories extends StatefulWidget {
 
 class _ListExpensesCategoriesState extends State<ListExpensesCategories> {
   @override
+  void initState() {
+    super.initState();
+    var controller = context.read<ExpenseCategoryController>();
+    controller.getExpensesCategories();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Consumer<ExpenseCategoryController>(
         builder: ((context, controller, child) => Scaffold(

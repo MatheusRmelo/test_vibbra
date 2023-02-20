@@ -13,6 +13,13 @@ class ListPartnersPage extends StatefulWidget {
 
 class _ListPartnersPageState extends State<ListPartnersPage> {
   @override
+  void initState() {
+    super.initState();
+    var controller = context.read<PartnerController>();
+    controller.getPartners();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Consumer<PartnerController>(
         builder: ((context, controller, child) => Scaffold(

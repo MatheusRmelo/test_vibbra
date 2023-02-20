@@ -5,4 +5,6 @@ class Routes {
   static const String preferences = "/preferences";
   static const String partnersForm = "/partners_form";
   static const String expensesCategoriesForm = "/expenses_categories_form";
+  static const String invoiceCompany = "/invoice_company";
+  static const String invoiceForm = "/invoice_form";
 }

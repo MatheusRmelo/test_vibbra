@@ -13,13 +13,15 @@ class ExpenseCategoryController extends ChangeNotifier {
           fromFirestore: ((snapshot, options) =>
               ExpenseCategory.fromJson(snapshot.data()!, snapshot.id)),
           toFirestore: (expenseCategory, _) => expenseCategory.toJson());
-  bool _isLoading = false;
+  bool _isLoading = true;
+  bool _isLoadingBtn = false;
   List<Error> _errors = [];
   List<ExpenseCategory> _expensesCategories = [];
   int _isDeletingIndex = -1;
   ExpenseCategory? _expenseCategoryEditing;
 
   bool get isLoading => _isLoading;
+  bool get isLoadingBtn => _isLoadingBtn;
   List<Error> get errors => _errors;
   List<ExpenseCategory> get expensesCategories => _expensesCategories;
   int get isDeletingIndex => _isDeletingIndex;
@@ -31,8 +33,6 @@ class ExpenseCategoryController extends ChangeNotifier {
   }
 
   Future<void> getExpensesCategories() async {
-    _isLoading = true;
-    notifyListeners();
     var partnersListFirestore = await _expensesCategoriesCollection.get();
     _expensesCategories =
         partnersListFirestore.docs.map((element) => element.data()).toList();
@@ -57,7 +57,7 @@ class ExpenseCategoryController extends ChangeNotifier {
       return false;
     }
 
-    _isLoading = true;
+    _isLoadingBtn = true;
     notifyListeners();
     try {
       if (_expenseCategoryEditing != null) {
@@ -78,7 +78,7 @@ class ExpenseCategoryController extends ChangeNotifier {
     } catch (e) {
       errors.add(Error(code: 'general|failed', message: e.toString()));
     } finally {
-      _isLoading = false;
+      _isLoadingBtn = false;
       notifyListeners();
     }
 

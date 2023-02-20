@@ -4,6 +4,8 @@ class Partner {
   String document;
   String socialReason;
 
+  bool? isHidden;
+
   Partner(
       {this.id = "",
       required this.name,
