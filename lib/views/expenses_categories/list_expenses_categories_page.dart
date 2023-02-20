@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:vibbra_test/controllers/expense_category_controller.dart';
 import 'package:vibbra_test/controllers/partner_controller.dart';
 import 'package:vibbra_test/utils/routes.dart';
+import 'package:vibbra_test/views/expenses_categories/widgets/expense_category_card.dart';
 import 'package:vibbra_test/views/partners/widgets/partner_card.dart';
 
 class ListExpensesCategories extends StatefulWidget {
@@ -14,13 +16,13 @@ class ListExpensesCategories extends StatefulWidget {
 class _ListExpensesCategoriesState extends State<ListExpensesCategories> {
   @override
   Widget build(BuildContext context) {
-    return Consumer<PartnerController>(
+    return Consumer<ExpenseCategoryController>(
         builder: ((context, controller, child) => Scaffold(
               body: controller.isLoading
                   ? const Center(
                       child: CircularProgressIndicator(),
                     )
-                  : controller.partners.isEmpty
+                  : controller.expensesCategories.isEmpty
                       ? Container(
                           padding: const EdgeInsets.all(16),
                           child: Column(
@@ -28,7 +30,7 @@ class _ListExpensesCategoriesState extends State<ListExpensesCategories> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               const Text(
-                                  "Você ainda não adicionou nenhuma empresa parceira",
+                                  "Você ainda não adicionou nenhuma categoria de despesa",
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                       fontSize: 16,
@@ -39,12 +41,12 @@ class _ListExpensesCategoriesState extends State<ListExpensesCategories> {
                                 margin: const EdgeInsets.only(top: 16),
                                 child: ElevatedButton(
                                     onPressed: () {
-                                      controller.partnerEditing = null;
-                                      Navigator.pushNamed(
-                                          context, Routes.partnersForm);
+                                      controller.expenseCategoryEditing = null;
+                                      Navigator.pushNamed(context,
+                                          Routes.expensesCategoriesForm);
                                     },
                                     child: const Text(
-                                        "Adicione empresa parceira")),
+                                        "Adicione uma categoria de despesa")),
                               )
                             ],
                           ),
@@ -52,25 +54,28 @@ class _ListExpensesCategoriesState extends State<ListExpensesCategories> {
                       : Container(
                           padding: const EdgeInsets.all(16),
                           child: ListView.builder(
-                            itemCount: controller.partners.length,
-                            itemBuilder: (context, index) => PartnerCard(
-                                partner: controller.partners[index],
-                                isLoading: controller.isDeletingIndex == index,
-                                onDelete: () {
-                                  controller.destroyPartner(index);
-                                },
-                                onEdit: () {
-                                  controller.partnerEditing =
-                                      controller.partners[index];
-                                  Navigator.pushNamed(
-                                      context, Routes.partnersForm);
-                                }),
+                            itemCount: controller.expensesCategories.length,
+                            itemBuilder: (context, index) =>
+                                ExpenseCategoryCard(
+                                    expenseCategory:
+                                        controller.expensesCategories[index],
+                                    isLoading:
+                                        controller.isDeletingIndex == index,
+                                    onDelete: () {
+                                      controller.destroyPartner(index);
+                                    },
+                                    onEdit: () {
+                                      controller.expenseCategoryEditing =
+                                          controller.expensesCategories[index];
+                                      Navigator.pushNamed(context,
+                                          Routes.expensesCategoriesForm);
+                                    }),
                           ),
                         ),
               floatingActionButton: FloatingActionButton(
                   onPressed: () {
-                    controller.partnerEditing = null;
-                    Navigator.pushNamed(context, Routes.partnersForm);
+                    controller.expenseCategoryEditing = null;
+                    Navigator.pushNamed(context, Routes.expensesCategoriesForm);
                   },
                   child: const Icon(Icons.add)),
             )));

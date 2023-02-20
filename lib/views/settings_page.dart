@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vibbra_test/views/expenses_categories/list_expenses_categories_page.dart';
 import 'package:vibbra_test/views/partners/list_partners_page.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -37,7 +38,7 @@ class _SettingsPageState extends State<SettingsPage> {
           body: const TabBarView(
             children: [
               ListPartnersPage(),
-              Icon(Icons.directions_transit),
+              ListExpensesCategories(),
               Icon(Icons.directions_bike),
             ],
           ),

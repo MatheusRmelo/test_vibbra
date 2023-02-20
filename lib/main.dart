@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vibbra_test/controllers/auth_controller.dart';
 import 'package:vibbra_test/controllers/company_controller.dart';
+import 'package:vibbra_test/controllers/expense_category_controller.dart';
 import 'package:vibbra_test/controllers/home_controller.dart';
 import 'package:vibbra_test/controllers/partner_controller.dart';
 import 'package:vibbra_test/firebase_options.dart';
 import 'package:vibbra_test/utils/routes.dart';
 import 'package:vibbra_test/views/auth/signin_dart.dart';
+import 'package:vibbra_test/views/expenses_categories/form_expense_category_page.dart';
 import 'package:vibbra_test/views/home_page.dart';
 import 'package:vibbra_test/views/partners/form_partner_page.dart';
 import 'package:vibbra_test/views/settings_page.dart';
@@ -23,7 +25,8 @@ void main() async {
       ChangeNotifierProvider(create: (_) => AuthController()),
       ChangeNotifierProvider(create: (_) => HomeController()),
       ChangeNotifierProvider(create: (_) => CompanyController()),
-      ChangeNotifierProvider(create: (_) => PartnerController())
+      ChangeNotifierProvider(create: (_) => PartnerController()),
+      ChangeNotifierProvider(create: (_) => ExpenseCategoryController())
     ],
     child: const MyApp(),
   ));
@@ -46,7 +49,9 @@ class MyApp extends StatelessWidget {
         Routes.signIn: (context) => const SignInPage(),
         Routes.registerCompany: ((context) => const RegisterCompanyPage()),
         Routes.settings: (context) => const SettingsPage(),
-        Routes.partnersForm: (context) => const FormPartnerPage()
+        Routes.partnersForm: (context) => const FormPartnerPage(),
+        Routes.expensesCategoriesForm: (context) =>
+            const FormExpenseCategoryPage(),
       },
     );
   }
