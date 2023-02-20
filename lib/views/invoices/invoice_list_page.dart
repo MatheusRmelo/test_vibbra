@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vibbra_test/controllers/invoice_controller.dart';
-import 'package:vibbra_test/controllers/partner_controller.dart';
 import 'package:vibbra_test/utils/routes.dart';
-import 'package:vibbra_test/views/invoice/widgets/invoice_card.dart';
-import 'package:vibbra_test/views/invoice/widgets/invoice_company_card.dart';
-import 'package:vibbra_test/views/partners/widgets/partner_card.dart';
+import 'package:vibbra_test/views/invoices/widgets/invoice_card.dart';
 
 class InvoiceListPage extends StatefulWidget {
   const InvoiceListPage({super.key});
@@ -52,7 +49,7 @@ class _InvoiceListPageState extends State<InvoiceListPage> {
                                     onPressed: () {
                                       controller.invoiceEditing = null;
                                       Navigator.pushNamed(
-                                          context, Routes.invoiceForm);
+                                          context, Routes.invoiceCompany);
                                     },
                                     child: const Text("Adicione nota fiscal")),
                               )

@@ -4,7 +4,7 @@ import 'package:vibbra_test/controllers/expense_category_controller.dart';
 import 'package:vibbra_test/controllers/invoice_controller.dart';
 import 'package:vibbra_test/models/expense_category.dart';
 import 'package:vibbra_test/utils/routes.dart';
-import 'package:vibbra_test/views/invoice/widgets/invoice_company_card.dart';
+import 'package:vibbra_test/views/invoices/widgets/invoice_company_card.dart';
 import 'package:vibbra_test/views/widgets/custom_checkbox_textfield.dart';
 import 'package:vibbra_test/views/widgets/custom_outlined_textfield.dart';
 import 'package:vibbra_test/models/error.dart';

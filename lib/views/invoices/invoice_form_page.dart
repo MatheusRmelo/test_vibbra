@@ -144,7 +144,8 @@ class _InvoiceFormPageState extends State<InvoiceFormPage> {
                                             number: int.parse(
                                                 numberController.text),
                                             month: month,
-                                            receiveDate: "02/20/2023",
+                                            receiveDate:
+                                                receiveDateController.text,
                                             description:
                                                 descriptionController.text))
                                         .then((value) {
