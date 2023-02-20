@@ -15,6 +15,7 @@ import 'package:vibbra_test/views/expenses_categories/form_expense_category_page
 import 'package:vibbra_test/views/home_page.dart';
 import 'package:vibbra_test/views/invoice/invoice_company_page.dart';
 import 'package:vibbra_test/views/invoice/invoice_form_page.dart';
+import 'package:vibbra_test/views/invoice/invoice_list_page.dart';
 import 'package:vibbra_test/views/partners/form_partner_page.dart';
 import 'package:vibbra_test/views/preferences_page.dart';
 import 'package:vibbra_test/views/register_company_page.dart';
@@ -59,7 +60,8 @@ class MyApp extends StatelessWidget {
         Routes.expensesCategoriesForm: (context) =>
             const FormExpenseCategoryPage(),
         Routes.invoiceCompany: (context) => const InvoiceCompanyPage(),
-        Routes.invoiceForm: (context) => const InvoiceFormPage()
+        Routes.invoiceForm: (context) => const InvoiceFormPage(),
+        Routes.invoiceList: (context) => const InvoiceListPage(),
       },
     );
   }

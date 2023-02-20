@@ -9,6 +9,8 @@ import 'package:vibbra_test/models/invoice.dart';
 import 'package:vibbra_test/models/partner.dart';
 import 'package:vibbra_test/utils/inputs_formatters/cnpj_input_formatter.dart';
 import 'package:vibbra_test/utils/inputs_formatters/phone_input_formatter.dart';
+import 'package:vibbra_test/utils/routes.dart';
+import 'package:vibbra_test/views/widgets/custom_datepicker_textfield.dart';
 import 'package:vibbra_test/views/widgets/custom_dropdown_textfield.dart';
 import 'package:vibbra_test/views/widgets/custom_outlined_textfield.dart';
 import 'package:vibbra_test/models/error.dart';
@@ -24,7 +26,6 @@ class _InvoiceFormPageState extends State<InvoiceFormPage> {
   TextEditingController valueController = TextEditingController();
   TextEditingController numberController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
-  TextEditingController monthController = TextEditingController();
   TextEditingController receiveDateController = TextEditingController();
   List<String> months = [
     "Janeiro",
@@ -46,13 +47,15 @@ class _InvoiceFormPageState extends State<InvoiceFormPage> {
   @override
   void initState() {
     super.initState();
-    var controller = context.read<PartnerController>();
-    if (controller.partnerEditing != null && mounted) {
+    var controller = context.read<InvoiceController>();
+    if (controller.invoiceEditing != null && mounted) {
       setState(() {
         _isEditing = true;
-        valueController.text = controller.partnerEditing!.name;
-        numberController.text = controller.partnerEditing!.document;
-        //descriptionController.text = controller.partnerEditing!.descriptionController;
+        valueController.text = controller.invoiceEditing!.value.toString();
+        numberController.text = controller.invoiceEditing!.number.toString();
+        descriptionController.text = controller.invoiceEditing!.description;
+        receiveDateController.text = controller.invoiceEditing!.receiveDate;
+        month = controller.invoiceEditing!.month;
       });
     }
   }
@@ -90,6 +93,10 @@ class _InvoiceFormPageState extends State<InvoiceFormPage> {
                         child: CustomOutlinedTextField(
                             controller: numberController,
                             prefixIcon: const Icon(Icons.numbers),
+                            inputFormatters: <TextInputFormatter>[
+                              FilteringTextInputFormatter.digitsOnly,
+                            ],
+                            keyboardType: TextInputType.number,
                             label: "Número da nota fiscal",
                             placeholder: "Digite o número da nota fiscal",
                             errors: controller.errors.errorsByCode("number"))),
@@ -114,6 +121,14 @@ class _InvoiceFormPageState extends State<InvoiceFormPage> {
                         }
                       },
                     ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    CustomDatePickerTextField(
+                      label: 'Data do recebimento',
+                      placeholder: "Digite a data do recebimento",
+                      controller: receiveDateController,
+                    ),
                     Container(
                         width: double.infinity,
                         height: 48,
@@ -124,7 +139,6 @@ class _InvoiceFormPageState extends State<InvoiceFormPage> {
                                 : () {
                                     controller
                                         .submit(Invoice(
-                                            company: controller.partner,
                                             value: double.parse(
                                                 valueController.text),
                                             number: int.parse(
@@ -135,7 +149,12 @@ class _InvoiceFormPageState extends State<InvoiceFormPage> {
                                                 descriptionController.text))
                                         .then((value) {
                                       if (value) {
-                                        Navigator.pop(context);
+                                        Navigator.pushNamedAndRemoveUntil(
+                                            context,
+                                            Routes.invoiceList,
+                                            (route) =>
+                                                route.settings.name ==
+                                                Routes.home);
                                       }
                                     });
                                   },

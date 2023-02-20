@@ -58,11 +58,25 @@ class _HomePageState extends State<HomePage> {
                 child: const Text("Logout")),
       ),
       floatingActionButton: SpeedDialFabWidget(
-        secondaryIconsList: [Icons.note_add, Icons.payment],
-        secondaryIconsText: ["Lançar Nota Fiscal", "Lançar Despesa"],
+        secondaryIconsList: const [
+          Icons.note_add,
+          Icons.payment,
+          Icons.list_alt,
+          Icons.payments,
+        ],
+        secondaryIconsText: const [
+          "Lançar Nota Fiscal",
+          "Lançar Despesa",
+          "Notas fiscais",
+          "Despesas"
+        ],
         secondaryIconsOnPress: [
           () {
             Navigator.pushNamed(context, Routes.invoiceCompany);
+          },
+          () => {},
+          () {
+            Navigator.pushNamed(context, Routes.invoiceList);
           },
           () => {},
         ],

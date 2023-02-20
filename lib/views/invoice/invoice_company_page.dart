@@ -101,57 +101,25 @@ class _InvoiceCompanyPageState extends State<InvoiceCompanyPage> {
                                                             .id),
                                       ),
                               )),
-                          Container(
-                              width: double.infinity,
-                              height: 48,
-                              margin: const EdgeInsets.only(top: 40),
-                              child: ElevatedButton(
-                                  onPressed: controller.partner != null ||
-                                          controller.isLoadingBtn
-                                      ? null
-                                      : () {},
-                                  child: controller.isLoadingBtn
-                                      ? Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: const [
-                                              SizedBox(
-                                                height: 24,
-                                                width: 24,
-                                                child:
-                                                    CircularProgressIndicator(
-                                                  color: Colors.white,
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                width: 16,
-                                              ),
-                                              Text("Carregando...",
-                                                  style: TextStyle(
-                                                      color: Colors.white))
-                                            ])
-                                      : const Text(
-                                          "Continuar com essa empresa")))
                         ],
                       )),
                 ),
               ),
               floatingActionButton: FloatingActionButton(
                   backgroundColor:
-                      controller.partner != null || controller.isLoadingBtn
+                      controller.partner == null || controller.isLoadingBtn
                           ? Colors.grey
                           : Theme.of(context).primaryColor,
                   onPressed:
-                      controller.partner != null || controller.isLoadingBtn
+                      controller.partner == null || controller.isLoadingBtn
                           ? null
                           : () {
+                              controller.invoiceEditing = null;
                               Navigator.pushNamed(context, Routes.invoiceForm);
                             },
                   child: Icon(
                     Icons.navigate_next,
-                    color: controller.partner != null || controller.isLoadingBtn
+                    color: controller.partner == null || controller.isLoadingBtn
                         ? Colors.white54
                         : Colors.white,
                   )),

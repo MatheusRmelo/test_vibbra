@@ -27,24 +27,27 @@ class InvoiceController extends ChangeNotifier {
   bool _isLoadingBtn = false;
   List<Error> _errors = [];
   List<Partner> _partners = [];
-  Partner? _partner = null;
+  List<Invoice> _invoices = [];
+  int _isDeletingInvoicesIndex = -1;
+  Partner? _partner;
+  Invoice? _invoiceEditing;
 
   bool get isLoading => _isLoading;
   bool get isLoadingBtn => _isLoadingBtn;
   List<Error> get errors => _errors;
   List<Partner> get partners => _partners;
+  List<Invoice> get invoices => _invoices;
   Partner? get partner => _partner;
+  int get isDeletingInvoicesIndex => _isDeletingInvoicesIndex;
+  Invoice? get invoiceEditing => _invoiceEditing;
 
   set partner(Partner? value) {
-    partner = value;
+    _partner = value;
     notifyListeners();
   }
 
-  Future<void> getPartners() async {
-    var partnersListFirestore = await _partnersCollection.get();
-    _partners =
-        partnersListFirestore.docs.map((element) => element.data()).toList();
-    _isLoading = false;
+  set invoiceEditing(Invoice? value) {
+    _invoiceEditing = value;
     notifyListeners();
   }
 
@@ -54,6 +57,34 @@ class InvoiceController extends ChangeNotifier {
           !(element.name.toLowerCase().contains(search.toLowerCase()) ||
               element.document.toLowerCase().contains(search.toLowerCase()));
     }
+    notifyListeners();
+  }
+
+  Future<void> getInvoices() async {
+    var invoiceListFirestore = await _invoicesCollection.get();
+    _invoices =
+        invoiceListFirestore.docs.map((element) => element.data()).toList();
+    for (var element in _invoices) {
+      if (element.company != null) {
+        var snapshot = await FirebaseFirestore.instance
+            .doc(element.company!.path)
+            .withConverter<Partner>(
+                fromFirestore: ((snapshot, options) =>
+                    Partner.fromJson(snapshot.data()!, snapshot.id)),
+                toFirestore: (partner, _) => partner.toJson())
+            .get();
+        element.companyValue = snapshot.data();
+      }
+    }
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> getPartners() async {
+    var partnersListFirestore = await _partnersCollection.get();
+    _partners =
+        partnersListFirestore.docs.map((element) => element.data()).toList();
+    _isLoading = false;
     notifyListeners();
   }
 
@@ -76,8 +107,17 @@ class InvoiceController extends ChangeNotifier {
 
     _isLoadingBtn = true;
     notifyListeners();
+    if (_invoiceEditing != null) {
+      invoice.company = _invoiceEditing!.company;
+    } else {
+      invoice.company = _partnersCollection.doc(_partner!.id);
+    }
     try {
-      await _invoicesCollection.add(invoice);
+      if (_invoiceEditing != null) {
+        await _invoicesCollection.doc(_invoiceEditing!.id).set(invoice);
+      } else {
+        await _invoicesCollection.add(invoice);
+      }
     } catch (e) {
       errors.add(Error(code: 'general|failed', message: e.toString()));
     } finally {
@@ -86,5 +126,24 @@ class InvoiceController extends ChangeNotifier {
     }
 
     return _errors.isEmpty;
+  }
+
+  Future<bool> destroyInvoice(int index) async {
+    _isDeletingInvoicesIndex = index;
+    _errors = [];
+    if (_isDeletingInvoicesIndex < 0) {
+      return false;
+    }
+    notifyListeners();
+    try {
+      await _invoicesCollection.doc(_invoices[index].id).delete();
+      _invoices.removeAt(index);
+    } catch (e) {
+      errors.add(Error(code: 'general|failed', message: e.toString()));
+    } finally {
+      _isDeletingInvoicesIndex = -1;
+      notifyListeners();
+    }
+    return true;
   }
 }

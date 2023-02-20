@@ -7,4 +7,5 @@ class Routes {
   static const String expensesCategoriesForm = "/expenses_categories_form";
   static const String invoiceCompany = "/invoice_company";
   static const String invoiceForm = "/invoice_form";
+  static const String invoiceList = "/invoice_list";
 }

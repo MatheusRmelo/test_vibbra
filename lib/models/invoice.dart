@@ -1,8 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:vibbra_test/models/partner.dart';
 
 class Invoice {
   String? id;
-  Partner? company;
+  DocumentReference<Partner>? company;
+  Partner? companyValue;
   double value;
   int number;
   String description;
@@ -11,17 +13,25 @@ class Invoice {
 
   Invoice(
       {this.id = "",
-      required this.company,
+      this.company,
+      this.companyValue,
       required this.value,
       required this.number,
       required this.description,
       required this.month,
       required this.receiveDate});
 
-  Invoice.fromJson(Map<String, Object?> json, String id)
+  Invoice.fromJson(Map<String, dynamic> json, String id)
       : this(
           id: id,
-          company: null,
+          company: json['company'] == null
+              ? null
+              : FirebaseFirestore.instance
+                  .doc(json['company'].path)
+                  .withConverter<Partner>(
+                      fromFirestore: ((snapshot, options) =>
+                          Partner.fromJson(snapshot.data()!, snapshot.id)),
+                      toFirestore: (partner, _) => partner.toJson()),
           value: json['value']! as double,
           number: json['number']! as int,
           description: json['description']! as String,
@@ -30,7 +40,7 @@ class Invoice {
         );
   Map<String, Object?> toJson() {
     return {
-      'company': company != null ? company!.toJson() : null,
+      'company': company,
       'value': value,
       'number': number,
       'description': description,
