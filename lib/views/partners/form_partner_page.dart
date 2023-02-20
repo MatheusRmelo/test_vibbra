@@ -10,17 +10,33 @@ import 'package:vibbra_test/utils/inputs_formatters/phone_input_formatter.dart';
 import 'package:vibbra_test/views/widgets/custom_outlined_textfield.dart';
 import 'package:vibbra_test/models/error.dart';
 
-class CreatePartnerPage extends StatefulWidget {
-  const CreatePartnerPage({super.key});
+class FormPartnerPage extends StatefulWidget {
+  const FormPartnerPage({super.key});
 
   @override
-  State<CreatePartnerPage> createState() => _CreatePartnerPageState();
+  State<FormPartnerPage> createState() => _FormPartnerPageState();
 }
 
-class _CreatePartnerPageState extends State<CreatePartnerPage> {
+class _FormPartnerPageState extends State<FormPartnerPage> {
   TextEditingController nameController = TextEditingController();
   TextEditingController documentController = TextEditingController();
   TextEditingController socialReason = TextEditingController();
+  bool _isEditing = false;
+
+  @override
+  void initState() {
+    super.initState();
+    var controller = context.read<PartnerController>();
+    if (controller.partnerEditing != null && mounted) {
+      setState(() {
+        _isEditing = true;
+        nameController.text = controller.partnerEditing!.name;
+        documentController.text = controller.partnerEditing!.document;
+        socialReason.text = controller.partnerEditing!.socialReason;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,8 +52,9 @@ class _CreatePartnerPageState extends State<CreatePartnerPage> {
                     Container(
                         margin: const EdgeInsets.only(bottom: 32),
                         padding: const EdgeInsets.only(top: 16),
-                        child: const Text("Cadastre uma empresa parceira",
-                            style: TextStyle(fontSize: 24))),
+                        child: Text(
+                            "${_isEditing ? 'Edite' : 'Cadastrar'} uma empresa parceira",
+                            style: const TextStyle(fontSize: 24))),
                     CustomOutlinedTextField(
                         controller: documentController,
                         prefixIcon: const Icon(Icons.business),
@@ -73,7 +90,7 @@ class _CreatePartnerPageState extends State<CreatePartnerPage> {
                                 ? null
                                 : () {
                                     controller
-                                        .store(Partner(
+                                        .submit(Partner(
                                             name: nameController.text,
                                             document: documentController.text,
                                             socialReason: socialReason.text))
@@ -103,7 +120,8 @@ class _CreatePartnerPageState extends State<CreatePartnerPage> {
                                             style:
                                                 TextStyle(color: Colors.white))
                                       ])
-                                : const Text("CADASTRAR EMPRESA PARCEIRA")))
+                                : Text(
+                                    "${_isEditing ? 'EDITAR' : 'CADASTRAR'} EMPRESA PARCEIRA")))
                   ],
                 )),
           ),

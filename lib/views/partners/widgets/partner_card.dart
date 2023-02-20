@@ -3,10 +3,12 @@ import 'package:vibbra_test/models/partner.dart';
 
 class PartnerCard extends StatelessWidget {
   final Partner partner;
+  final bool isLoading;
   final Function onDelete;
   final Function onEdit;
   const PartnerCard(
       {super.key,
+      this.isLoading = false,
       required this.partner,
       required this.onEdit,
       required this.onDelete});
@@ -48,56 +50,58 @@ class PartnerCard extends StatelessWidget {
                 ),
               ],
             )),
-            PopupMenuButton(
-              itemBuilder: (context) => const [
-                PopupMenuItem<int>(
-                  value: 0,
-                  child: Text("Editar", style: TextStyle(color: Colors.black)),
-                ),
-                PopupMenuItem<int>(
-                  value: 1,
-                  child: Text("Excluir", style: TextStyle(color: Colors.black)),
-                ),
-              ],
-              onSelected: (value) async {
-                if (value == 0) {
-                  onEdit();
-                } else if (value == 1) {
-                  await showDialog<String>(
-                    context: context,
-                    builder: (context) {
-                      return AlertDialog(
-                        backgroundColor:
-                            Theme.of(context).colorScheme.secondary,
-                        content: Text(
-                            "Deseja excluir a empresa parceira ${partner.name}?",
-                            style: const TextStyle(color: Colors.black)),
-                        actions: [
-                          TextButton(
-                              onPressed: () {
-                                onDelete();
-                                Navigator.pop(context);
-                              },
-                              child: const Text("Cancelar",
-                                  style: TextStyle(color: Colors.red))),
-                          SizedBox(
-                            height: 40,
-                            child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.red,
-                                ),
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: const Text("Excluir atividade")),
-                          )
-                        ],
-                      );
+            isLoading
+                ? CircularProgressIndicator()
+                : PopupMenuButton(
+                    itemBuilder: (context) => const [
+                      PopupMenuItem<int>(
+                        value: 0,
+                        child: Text("Editar",
+                            style: TextStyle(color: Colors.black)),
+                      ),
+                      PopupMenuItem<int>(
+                        value: 1,
+                        child: Text("Excluir",
+                            style: TextStyle(color: Colors.black)),
+                      ),
+                    ],
+                    onSelected: (value) async {
+                      if (value == 0) {
+                        onEdit();
+                      } else if (value == 1) {
+                        await showDialog<String>(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              content: Text(
+                                  "Deseja excluir a empresa parceira ${partner.name.toUpperCase()}?",
+                                  style: const TextStyle(color: Colors.black)),
+                              actions: [
+                                TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text("Cancelar",
+                                        style: TextStyle(color: Colors.red))),
+                                SizedBox(
+                                  height: 40,
+                                  child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.red,
+                                      ),
+                                      onPressed: () {
+                                        onDelete();
+                                        Navigator.pop(context);
+                                      },
+                                      child: const Text("Excluir empresa")),
+                                )
+                              ],
+                            );
+                          },
+                        );
+                      }
                     },
-                  );
-                }
-              },
-            ),
+                  ),
           ],
         ));
   }

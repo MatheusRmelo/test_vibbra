@@ -4,14 +4,14 @@ import 'package:vibbra_test/controllers/partner_controller.dart';
 import 'package:vibbra_test/utils/routes.dart';
 import 'package:vibbra_test/views/partners/widgets/partner_card.dart';
 
-class ListPartnersPage extends StatefulWidget {
-  const ListPartnersPage({super.key});
+class ListExpensesCategories extends StatefulWidget {
+  const ListExpensesCategories({super.key});
 
   @override
-  State<ListPartnersPage> createState() => _ListPartnersPageState();
+  State<ListExpensesCategories> createState() => _ListExpensesCategoriesState();
 }
 
-class _ListPartnersPageState extends State<ListPartnersPage> {
+class _ListExpensesCategoriesState extends State<ListExpensesCategories> {
   @override
   Widget build(BuildContext context) {
     return Consumer<PartnerController>(

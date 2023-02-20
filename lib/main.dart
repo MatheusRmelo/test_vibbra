@@ -9,7 +9,7 @@ import 'package:vibbra_test/firebase_options.dart';
 import 'package:vibbra_test/utils/routes.dart';
 import 'package:vibbra_test/views/auth/signin_dart.dart';
 import 'package:vibbra_test/views/home_page.dart';
-import 'package:vibbra_test/views/partners/create_partner_page.dart';
+import 'package:vibbra_test/views/partners/form_partner_page.dart';
 import 'package:vibbra_test/views/settings_page.dart';
 import 'package:vibbra_test/views/register_company_page.dart';
 
@@ -46,7 +46,7 @@ class MyApp extends StatelessWidget {
         Routes.signIn: (context) => const SignInPage(),
         Routes.registerCompany: ((context) => const RegisterCompanyPage()),
         Routes.settings: (context) => const SettingsPage(),
-        Routes.partnersCreate: (context) => const CreatePartnerPage()
+        Routes.partnersForm: (context) => const FormPartnerPage()
       },
     );
   }

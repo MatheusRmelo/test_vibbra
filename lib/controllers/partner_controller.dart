@@ -12,14 +12,24 @@ class PartnerController extends ChangeNotifier {
       .collection('partners')
       .withConverter<Partner>(
           fromFirestore: ((snapshot, options) =>
-              Partner.fromJson(snapshot.data()!)),
+              Partner.fromJson(snapshot.data()!, snapshot.id)),
           toFirestore: (partner, _) => partner.toJson());
   bool _isLoading = false;
   List<Error> _errors = [];
   List<Partner> _partners = [];
+  int _isDeletingIndex = -1;
+  Partner? _partnerEditing;
+
   bool get isLoading => _isLoading;
   List<Error> get errors => _errors;
   List<Partner> get partners => _partners;
+  int get isDeletingIndex => _isDeletingIndex;
+  Partner? get partnerEditing => _partnerEditing;
+
+  set partnerEditing(Partner? value) {
+    _partnerEditing = value;
+    notifyListeners();
+  }
 
   Future<void> getPartners() async {
     _isLoading = true;
@@ -31,7 +41,7 @@ class PartnerController extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<bool> store(Partner partner) async {
+  Future<bool> submit(Partner partner) async {
     _errors = [];
     if (partner.name.isEmpty) {
       _errors.add(Error(
@@ -59,9 +69,18 @@ class PartnerController extends ChangeNotifier {
     _isLoading = true;
     notifyListeners();
     try {
-      DocumentReference<Partner> ref = await _partnersCollection.add(partner);
-      var snapshot = await ref.get();
-      _partners.add(snapshot.data()!);
+      if (_partnerEditing != null) {
+        await _partnersCollection.doc(_partnerEditing!.id).set(partner);
+        int index = _partners
+            .indexWhere((element) => element.id == _partnerEditing!.id);
+        _partners[index].document = partner.document;
+        _partners[index].name = partner.name;
+        _partners[index].socialReason = partner.socialReason;
+      } else {
+        DocumentReference<Partner> ref = await _partnersCollection.add(partner);
+        var snapshot = await ref.get();
+        _partners.add(snapshot.data()!);
+      }
     } catch (e) {
       errors.add(Error(code: 'general|failed', message: e.toString()));
     } finally {
@@ -70,5 +89,24 @@ class PartnerController extends ChangeNotifier {
     }
 
     return _errors.isEmpty;
+  }
+
+  Future<bool> destroyPartner(int index) async {
+    _isDeletingIndex = index;
+    _errors = [];
+    if (_isDeletingIndex < 0) {
+      return false;
+    }
+    notifyListeners();
+    try {
+      await _partnersCollection.doc(_partners[index].id).delete();
+      _partners.removeAt(index);
+    } catch (e) {
+      errors.add(Error(code: 'general|failed', message: e.toString()));
+    } finally {
+      _isDeletingIndex = -1;
+      notifyListeners();
+    }
+    return true;
   }
 }
