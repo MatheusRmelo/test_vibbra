@@ -7,7 +7,7 @@ import 'package:vibbra_test/utils/validates.dart';
 
 class PartnerController extends ChangeNotifier {
   final _partnersCollection = FirebaseFirestore.instance
-      .collection('settings')
+      .collection('preferences')
       .doc(FirebaseAuth.instance.currentUser!.uid)
       .collection('partners')
       .withConverter<Partner>(

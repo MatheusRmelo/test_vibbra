@@ -6,7 +6,7 @@ import 'package:vibbra_test/models/error.dart';
 
 class ExpenseCategoryController extends ChangeNotifier {
   final _expensesCategoriesCollection = FirebaseFirestore.instance
-      .collection('settings')
+      .collection('preferences')
       .doc(FirebaseAuth.instance.currentUser!.uid)
       .collection('expenses_categories')
       .withConverter<ExpenseCategory>(

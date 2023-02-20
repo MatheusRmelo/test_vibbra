@@ -6,13 +6,14 @@ import 'package:vibbra_test/controllers/company_controller.dart';
 import 'package:vibbra_test/controllers/expense_category_controller.dart';
 import 'package:vibbra_test/controllers/home_controller.dart';
 import 'package:vibbra_test/controllers/partner_controller.dart';
+import 'package:vibbra_test/controllers/settings_controller.dart';
 import 'package:vibbra_test/firebase_options.dart';
 import 'package:vibbra_test/utils/routes.dart';
 import 'package:vibbra_test/views/auth/signin_dart.dart';
 import 'package:vibbra_test/views/expenses_categories/form_expense_category_page.dart';
 import 'package:vibbra_test/views/home_page.dart';
 import 'package:vibbra_test/views/partners/form_partner_page.dart';
-import 'package:vibbra_test/views/settings_page.dart';
+import 'package:vibbra_test/views/preferences_page.dart';
 import 'package:vibbra_test/views/register_company_page.dart';
 
 void main() async {
@@ -26,7 +27,8 @@ void main() async {
       ChangeNotifierProvider(create: (_) => HomeController()),
       ChangeNotifierProvider(create: (_) => CompanyController()),
       ChangeNotifierProvider(create: (_) => PartnerController()),
-      ChangeNotifierProvider(create: (_) => ExpenseCategoryController())
+      ChangeNotifierProvider(create: (_) => ExpenseCategoryController()),
+      ChangeNotifierProvider(create: (_) => SettingsController())
     ],
     child: const MyApp(),
   ));
@@ -48,7 +50,7 @@ class MyApp extends StatelessWidget {
         Routes.home: (context) => const HomePage(),
         Routes.signIn: (context) => const SignInPage(),
         Routes.registerCompany: ((context) => const RegisterCompanyPage()),
-        Routes.settings: (context) => const SettingsPage(),
+        Routes.preferences: (context) => const PreferencesPage(),
         Routes.partnersForm: (context) => const FormPartnerPage(),
         Routes.expensesCategoriesForm: (context) =>
             const FormExpenseCategoryPage(),
