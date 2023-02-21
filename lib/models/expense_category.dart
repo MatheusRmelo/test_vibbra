@@ -3,6 +3,7 @@ class ExpenseCategory {
   String name;
   String description;
   bool isDisabled;
+  bool? isHidden;
 
   ExpenseCategory(
       {this.id,

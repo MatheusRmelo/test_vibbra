@@ -51,6 +51,16 @@ class InvoiceController extends ChangeNotifier {
     notifyListeners();
   }
 
+  void cleanErrors() {
+    _errors = [];
+    notifyListeners();
+  }
+
+  void addError(Error error) {
+    _errors.add(error);
+    notifyListeners();
+  }
+
   void handleSearchPartner(String search) {
     for (var element in _partners) {
       element.isHidden =

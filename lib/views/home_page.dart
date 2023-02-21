@@ -74,11 +74,15 @@ class _HomePageState extends State<HomePage> {
           () {
             Navigator.pushNamed(context, Routes.invoiceCompany);
           },
-          () => {},
+          () {
+            Navigator.pushNamed(context, Routes.expensesSelectCategory);
+          },
           () {
             Navigator.pushNamed(context, Routes.invoiceList);
           },
-          () => {},
+          () {
+            Navigator.pushNamed(context, Routes.expenses);
+          },
         ],
       ),
     );

@@ -1,61 +1,45 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:vibbra_test/controllers/company_controller.dart';
+import 'package:vibbra_test/controllers/expense_controller.dart';
 import 'package:vibbra_test/controllers/invoice_controller.dart';
-import 'package:vibbra_test/controllers/partner_controller.dart';
-import 'package:vibbra_test/models/company.dart';
+import 'package:vibbra_test/models/expense.dart';
 import 'package:vibbra_test/models/invoice.dart';
-import 'package:vibbra_test/models/partner.dart';
-import 'package:vibbra_test/utils/inputs_formatters/cnpj_input_formatter.dart';
-import 'package:vibbra_test/utils/inputs_formatters/phone_input_formatter.dart';
 import 'package:vibbra_test/utils/routes.dart';
+import 'package:vibbra_test/views/widgets/custom_checkbox_textfield.dart';
 import 'package:vibbra_test/views/widgets/custom_datepicker_textfield.dart';
 import 'package:vibbra_test/views/widgets/custom_dropdown_textfield.dart';
 import 'package:vibbra_test/views/widgets/custom_outlined_textfield.dart';
 import 'package:vibbra_test/models/error.dart';
 
-class InvoiceFormPage extends StatefulWidget {
-  const InvoiceFormPage({super.key});
+class ExpensesFormPage extends StatefulWidget {
+  const ExpensesFormPage({super.key});
 
   @override
-  State<InvoiceFormPage> createState() => _InvoiceFormPageState();
+  State<ExpensesFormPage> createState() => _ExpensesFormPageState();
 }
 
-class _InvoiceFormPageState extends State<InvoiceFormPage> {
+class _ExpensesFormPageState extends State<ExpensesFormPage> {
   TextEditingController valueController = TextEditingController();
-  TextEditingController numberController = TextEditingController();
-  TextEditingController descriptionController = TextEditingController();
-  TextEditingController receiveDateController = TextEditingController();
-  List<String> months = [
-    "Janeiro",
-    "Feveiro",
-    "Março",
-    "Abril",
-    "Main",
-    "Junho",
-    "Julho",
-    "Agosto",
-    "Setembro",
-    "Outubro",
-    "Novembro",
-    "Dezembro"
-  ];
-  String month = "Janeiro";
+  TextEditingController nameController = TextEditingController();
+  TextEditingController paymentDateController = TextEditingController();
+  TextEditingController competenseDateController = TextEditingController();
+
+  bool _withCompany = false;
   bool _isEditing = false;
 
   @override
   void initState() {
     super.initState();
-    var controller = context.read<InvoiceController>();
-    if (controller.invoiceEditing != null && mounted) {
+    var controller = context.read<ExpenseController>();
+    if (controller.expenseEditing != null && mounted) {
       setState(() {
         _isEditing = true;
-        valueController.text = controller.invoiceEditing!.value.toString();
-        numberController.text = controller.invoiceEditing!.number.toString();
-        descriptionController.text = controller.invoiceEditing!.description;
-        receiveDateController.text = controller.invoiceEditing!.receiveDate;
-        month = controller.invoiceEditing!.month;
+        valueController.text = controller.expenseEditing!.value.toString();
+        nameController.text = controller.expenseEditing!.name;
+        paymentDateController.text = controller.expenseEditing!.datePayment;
+        competenseDateController.text =
+            controller.expenseEditing!.dateCompetence;
       });
     }
   }
@@ -65,70 +49,79 @@ class _InvoiceFormPageState extends State<InvoiceFormPage> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: const Text("Lançamento de nota fiscal"),
+        title: const Text("Lançamento de despesa"),
       ),
       body: Container(
         padding: const EdgeInsets.all(16),
         child: SingleChildScrollView(
-          child: Consumer<InvoiceController>(
+          child: Consumer<ExpenseController>(
             builder: ((context, controller, child) => Column(
                   children: [
                     Container(
                         margin: const EdgeInsets.only(bottom: 32),
                         padding: const EdgeInsets.only(top: 16),
-                        child: const Text("Informações da nota fiscal",
+                        child: const Text("Informações da despesa",
                             style: TextStyle(fontSize: 24))),
                     CustomOutlinedTextField(
                         controller: valueController,
                         prefixIcon: const Icon(Icons.attach_money),
-                        label: "Valor da nota",
+                        label: "Valor da despesa",
                         inputFormatters: <TextInputFormatter>[
                           FilteringTextInputFormatter.digitsOnly,
                         ],
                         keyboardType: TextInputType.number,
-                        placeholder: "Digite o valor da nota",
+                        placeholder: "Digite o valor da despesa",
                         errors: controller.errors.errorsByCode("value")),
                     Container(
                         margin: const EdgeInsets.symmetric(vertical: 16),
                         child: CustomOutlinedTextField(
-                            controller: numberController,
+                            controller: nameController,
                             prefixIcon: const Icon(Icons.numbers),
-                            inputFormatters: <TextInputFormatter>[
-                              FilteringTextInputFormatter.digitsOnly,
-                            ],
-                            keyboardType: TextInputType.number,
-                            label: "Número da nota fiscal",
-                            placeholder: "Digite o número da nota fiscal",
-                            errors: controller.errors.errorsByCode("number"))),
-                    CustomOutlinedTextField(
-                        controller: descriptionController,
-                        prefixIcon: const Icon(Icons.feed),
-                        label: "Descrição do serviço prestado",
-                        placeholder: "Digite a descrição do serviço prestado",
-                        errors: controller.errors.errorsByCode("description")),
+                            label: "Nome da despesa",
+                            placeholder: "Digite o nome da despesa",
+                            errors: controller.errors.errorsByCode("name"))),
                     const SizedBox(
                       height: 16,
                     ),
-                    CustomDropdownTextField(
-                      label: 'Mês de competência',
-                      list: months,
-                      value: month,
-                      onChanged: (String? value) {
-                        if (value != null) {
-                          setState(() {
-                            month = value;
-                          });
-                        }
-                      },
+                    CustomDatePickerTextField(
+                      label: 'Data de pagamento',
+                      placeholder: "Informe da data de pagamento",
+                      controller: paymentDateController,
                     ),
                     const SizedBox(
                       height: 16,
                     ),
                     CustomDatePickerTextField(
-                      label: 'Data do recebimento',
-                      placeholder: "Digite a data do recebimento",
-                      controller: receiveDateController,
+                      label: 'Data de competência',
+                      placeholder: "Informe da data de competência",
+                      controller: competenseDateController,
                     ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    ElevatedButton(
+                        onPressed: () {
+                          Navigator.pushNamed(
+                              context, Routes.expensesSelectCompany);
+                        },
+                        child: const Text("Víncular com empresa parceira")),
+                    controller.partner != null ||
+                            (_isEditing &&
+                                controller.expenseEditing != null &&
+                                controller.expenseEditing!.company != null)
+                        ? Column(
+                            children: [
+                              const Text("Vínculado com",
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.bold)),
+                              Text(_isEditing &&
+                                      controller.expenseEditing != null &&
+                                      controller.expenseEditing!.company != null
+                                  ? "${controller.expenseEditing!.company!.name} - ${controller.expenseEditing!.company!.document}"
+                                  : "${controller.partner!.name} - ${controller.partner!.document}")
+                            ],
+                          )
+                        : Container(),
                     Container(
                         width: double.infinity,
                         height: 48,
@@ -144,30 +137,26 @@ class _InvoiceFormPageState extends State<InvoiceFormPage> {
                                           message: "Valor é obrigatório"));
                                       return;
                                     }
-                                    if (numberController.text.isEmpty) {
+                                    if (nameController.text.isEmpty) {
                                       controller.addError(Error(
-                                          code: 'number|required',
-                                          message:
-                                              "Número da nota fiscal é obrigatório"));
+                                          code: 'name|required',
+                                          message: "Nome é obrigatório"));
                                       return;
                                     }
 
                                     controller
-                                        .submit(Invoice(
-                                            value: double.parse(
-                                                valueController.text),
-                                            number: int.parse(
-                                                numberController.text),
-                                            month: month,
-                                            receiveDate:
-                                                receiveDateController.text,
-                                            description:
-                                                descriptionController.text))
+                                        .submit(Expense(
+                                      value: double.parse(valueController.text),
+                                      name: nameController.text,
+                                      datePayment: paymentDateController.text,
+                                      dateCompetence:
+                                          competenseDateController.text,
+                                    ))
                                         .then((value) {
                                       if (value) {
                                         Navigator.pushNamedAndRemoveUntil(
                                             context,
-                                            Routes.invoiceList,
+                                            Routes.expenses,
                                             (route) =>
                                                 route.settings.name ==
                                                 Routes.home);
@@ -195,7 +184,7 @@ class _InvoiceFormPageState extends State<InvoiceFormPage> {
                                                 TextStyle(color: Colors.white))
                                       ])
                                 : Text(
-                                    "${_isEditing ? 'EDITAR' : 'LANÇAR'} NOTA FISCAL")))
+                                    "${_isEditing ? 'EDITAR' : 'LANÇAR'} DESPESA")))
                   ],
                 )),
           ),

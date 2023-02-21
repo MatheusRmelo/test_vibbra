@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:vibbra_test/controllers/auth_controller.dart';
 import 'package:vibbra_test/controllers/company_controller.dart';
 import 'package:vibbra_test/controllers/expense_category_controller.dart';
+import 'package:vibbra_test/controllers/expense_controller.dart';
 import 'package:vibbra_test/controllers/home_controller.dart';
 import 'package:vibbra_test/controllers/invoice_controller.dart';
 import 'package:vibbra_test/controllers/partner_controller.dart';
@@ -11,6 +12,10 @@ import 'package:vibbra_test/controllers/settings_controller.dart';
 import 'package:vibbra_test/firebase_options.dart';
 import 'package:vibbra_test/utils/routes.dart';
 import 'package:vibbra_test/views/auth/signin_dart.dart';
+import 'package:vibbra_test/views/expenses/expenses_category_select_page.dart';
+import 'package:vibbra_test/views/expenses/expenses_company_select_page.dart';
+import 'package:vibbra_test/views/expenses/expenses_form_page.dart';
+import 'package:vibbra_test/views/expenses/expenses_page.dart';
 import 'package:vibbra_test/views/expenses_categories/form_expense_category_page.dart';
 import 'package:vibbra_test/views/home_page.dart';
 import 'package:vibbra_test/views/invoices/invoice_company_page.dart';
@@ -34,6 +39,7 @@ void main() async {
       ChangeNotifierProvider(create: (_) => ExpenseCategoryController()),
       ChangeNotifierProvider(create: (_) => SettingsController()),
       ChangeNotifierProvider(create: (_) => InvoiceController()),
+      ChangeNotifierProvider(create: (_) => ExpenseController()),
     ],
     child: const MyApp(),
   ));
@@ -62,6 +68,12 @@ class MyApp extends StatelessWidget {
         Routes.invoiceCompany: (context) => const InvoiceCompanyPage(),
         Routes.invoiceForm: (context) => const InvoiceFormPage(),
         Routes.invoiceList: (context) => const InvoiceListPage(),
+        Routes.expenses: (context) => const ExpensesPage(),
+        Routes.expensesSelectCategory: (context) =>
+            const ExpensesCategorySelectPage(),
+        Routes.expensesForm: (context) => const ExpensesFormPage(),
+        Routes.expensesSelectCompany: (context) =>
+            const ExpensesCompanySelectPage(),
       },
     );
   }

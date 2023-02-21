@@ -8,7 +8,7 @@ import 'package:vibbra_test/models/invoice.dart';
 import 'package:vibbra_test/models/partner.dart';
 import 'package:vibbra_test/utils/validates.dart';
 
-class InvoiceController extends ChangeNotifier {
+class ExpenseController extends ChangeNotifier {
   final _partnersCollection = FirebaseFirestore.instance
       .collection('preferences')
       .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -17,7 +17,7 @@ class InvoiceController extends ChangeNotifier {
           fromFirestore: ((snapshot, options) =>
               Partner.fromJson(snapshot.data()!, snapshot.id)),
           toFirestore: (partner, _) => partner.toJson());
-  final _expensesCategoriesollection = FirebaseFirestore.instance
+  final _expensesCategoriesCollection = FirebaseFirestore.instance
       .collection('preferences')
       .doc(FirebaseAuth.instance.currentUser!.uid)
       .collection('expenses_categories')
@@ -37,17 +37,21 @@ class InvoiceController extends ChangeNotifier {
   bool _isLoadingBtn = false;
   List<Error> _errors = [];
   List<Partner> _partners = [];
+  List<ExpenseCategory> _expensesCategories = [];
   List<Expense> _expenses = [];
   int _isDeletingInvoicesIndex = -1;
   ExpenseCategory? _category;
+  Partner? _partner;
   Expense? _expenseEditing;
 
   bool get isLoading => _isLoading;
   bool get isLoadingBtn => _isLoadingBtn;
   List<Error> get errors => _errors;
   List<Partner> get partners => _partners;
+  List<ExpenseCategory> get expensesCategories => _expensesCategories;
   List<Expense> get expenses => _expenses;
   ExpenseCategory? get category => _category;
+  Partner? get partner => _partner;
   int get isDeletingInvoicesIndex => _isDeletingInvoicesIndex;
   Expense? get expenseEditing => _expenseEditing;
 
@@ -56,8 +60,33 @@ class InvoiceController extends ChangeNotifier {
     notifyListeners();
   }
 
+  set partner(Partner? value) {
+    _partner = value;
+    notifyListeners();
+  }
+
   set expenseEditing(Expense? value) {
     _expenseEditing = value;
+    _partner = null;
+    notifyListeners();
+  }
+
+  void cleanErrors() {
+    _errors = [];
+    notifyListeners();
+  }
+
+  void addError(Error error) {
+    _errors.add(error);
+    notifyListeners();
+  }
+
+  void handleSearchCategory(String search) {
+    for (var element in _expensesCategories) {
+      element.isHidden =
+          !(element.name.toLowerCase().contains(search.toLowerCase()) ||
+              element.description.toLowerCase().contains(search.toLowerCase()));
+    }
     notifyListeners();
   }
 
@@ -108,7 +137,15 @@ class InvoiceController extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<bool> submit(Expense expense, Partner? company) async {
+  Future<void> getCategories() async {
+    var snapshot = await _expensesCategoriesCollection.get();
+    _expensesCategories =
+        snapshot.docs.map((element) => element.data()).toList();
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<bool> submit(Expense expense) async {
     _errors = [];
     if (expense.datePayment.isEmpty) {
       _errors.add(Error(
@@ -129,14 +166,19 @@ class InvoiceController extends ChangeNotifier {
     _isLoadingBtn = true;
     notifyListeners();
     if (_expenseEditing != null) {
-      expense.companyRef = _expenseEditing!.companyRef;
-    } else {
-      expense.companyRef = _partnersCollection.doc(company!.id);
+      if (_partner != null) {
+        expense.companyRef = _partnersCollection.doc(_partner!.id);
+      } else {
+        expense.companyRef = _expenseEditing!.companyRef;
+      }
+    } else if (_partner != null) {
+      expense.companyRef = _partnersCollection.doc(_partner!.id);
     }
+
     if (_expenseEditing != null) {
       expense.categoryRef = _expenseEditing!.categoryRef;
     } else {
-      expense.categoryRef = _expensesCategoriesollection.doc(_category!.id);
+      expense.categoryRef = _expensesCategoriesCollection.doc(_category!.id);
     }
     try {
       if (_expenseEditing != null) {
