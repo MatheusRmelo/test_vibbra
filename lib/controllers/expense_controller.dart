@@ -138,7 +138,9 @@ class ExpenseController extends ChangeNotifier {
   }
 
   Future<void> getCategories() async {
-    var snapshot = await _expensesCategoriesCollection.get();
+    var snapshot = await _expensesCategoriesCollection
+        .where('is_disabled', isEqualTo: false)
+        .get();
     _expensesCategories =
         snapshot.docs.map((element) => element.data()).toList();
     _isLoading = false;
