@@ -100,10 +100,7 @@ class InvoiceController extends ChangeNotifier {
 
   Future<bool> submit(Invoice invoice) async {
     _errors = [];
-    if (invoice.month.isEmpty) {
-      _errors.add(Error(
-          code: 'month|required', message: "Mês é uma informação obrigatória"));
-    }
+
     if (invoice.receiveDate.isEmpty) {
       _errors.add(Error(
           code: 'receive_data|required',

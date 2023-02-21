@@ -12,6 +12,7 @@ class Expense {
   double value;
   DocumentReference<Partner>? companyRef;
   Partner? company;
+  int month = 0;
 
   Expense(
       {this.id = "",
@@ -19,6 +20,7 @@ class Expense {
       this.category,
       this.companyRef,
       this.company,
+      this.month = 0,
       required this.value,
       required this.name,
       required this.datePayment,
@@ -44,10 +46,13 @@ class Expense {
                       fromFirestore: ((snapshot, options) =>
                           Partner.fromJson(snapshot.data()!, snapshot.id)),
                       toFirestore: (partner, _) => partner.toJson()),
-          value: json['value']! as double,
+          value: json['value'] is int
+              ? json['value'].toDouble()
+              : json['value']! as double,
           name: json['name']! as String,
           datePayment: json['date_payment']! as String,
           dateCompetence: json['date_competence']! as String,
+          month: json['month']! as int,
         );
   Map<String, Object?> toJson() {
     return {
@@ -56,7 +61,9 @@ class Expense {
       'name': name,
       'company': companyRef,
       'date_payment': datePayment,
-      'date_competence': dateCompetence
+      'date_competence': dateCompetence,
+      'month': DateTime.parse(dateCompetence).month,
+      'year': DateTime.parse(dateCompetence).year,
     };
   }
 }

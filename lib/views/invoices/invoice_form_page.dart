@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:vibbra_test/controllers/company_controller.dart';
 import 'package:vibbra_test/controllers/invoice_controller.dart';
@@ -55,7 +56,6 @@ class _InvoiceFormPageState extends State<InvoiceFormPage> {
         numberController.text = controller.invoiceEditing!.number.toString();
         descriptionController.text = controller.invoiceEditing!.description;
         receiveDateController.text = controller.invoiceEditing!.receiveDate;
-        month = controller.invoiceEditing!.month;
       });
     }
   }
@@ -109,18 +109,18 @@ class _InvoiceFormPageState extends State<InvoiceFormPage> {
                     const SizedBox(
                       height: 16,
                     ),
-                    CustomDropdownTextField(
-                      label: 'Mês de competência',
-                      list: months,
-                      value: month,
-                      onChanged: (String? value) {
-                        if (value != null) {
-                          setState(() {
-                            month = value;
-                          });
-                        }
-                      },
-                    ),
+                    // CustomDropdownTextField(
+                    //   label: 'Mês de competência',
+                    //   list: months,
+                    //   value: month,
+                    //   onChanged: (String? value) {
+                    //     if (value != null) {
+                    //       setState(() {
+                    //         month = value;
+                    //       });
+                    //     }
+                    //   },
+                    // ),
                     const SizedBox(
                       height: 16,
                     ),
@@ -158,7 +158,9 @@ class _InvoiceFormPageState extends State<InvoiceFormPage> {
                                                 valueController.text),
                                             number: int.parse(
                                                 numberController.text),
-                                            month: month,
+                                            month: DateTime.parse(
+                                                    receiveDateController.text)
+                                                .month,
                                             receiveDate:
                                                 receiveDateController.text,
                                             description:

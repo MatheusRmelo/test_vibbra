@@ -8,7 +8,7 @@ class Invoice {
   double value;
   int number;
   String description;
-  String month;
+  int month;
   String receiveDate;
 
   Invoice(
@@ -32,10 +32,12 @@ class Invoice {
                       fromFirestore: ((snapshot, options) =>
                           Partner.fromJson(snapshot.data()!, snapshot.id)),
                       toFirestore: (partner, _) => partner.toJson()),
-          value: json['value']! as double,
+          value: json['value'] is int
+              ? json['value'].toDouble()
+              : json['value']! as double,
           number: json['number']! as int,
           description: json['description']! as String,
-          month: json['month']! as String,
+          month: json['month']! as int,
           receiveDate: json['receive_date']! as String,
         );
   Map<String, Object?> toJson() {
@@ -45,6 +47,7 @@ class Invoice {
       'number': number,
       'description': description,
       'month': month,
+      'year': DateTime.parse(receiveDate).year,
       'receive_date': receiveDate
     };
   }
