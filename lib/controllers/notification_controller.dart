@@ -29,10 +29,10 @@ class NotificationController extends ChangeNotifier {
                 "Você pode emitir até ${settings.limit - totalInvoices} para continuar como MEI");
       }
       if (settings.alertSMS) {
-        // sendSMSAlert(
-        //     phone: settings.phone,
-        //     message:
-        //         "Voce pode emitir ate ${settings.limit - totalInvoices} para continuar como MEI");
+        sendSMSAlert(
+            phone: settings.phone,
+            message:
+                "Voce pode emitir ate ${settings.limit - totalInvoices} para continuar como MEI");
       }
     } else if (percent >= 80) {
       if (settings.alertEmail) {
@@ -42,10 +42,10 @@ class NotificationController extends ChangeNotifier {
                 "Porcentagem atual é $percent porcento para passar o limite MEI");
       }
       if (settings.alertSMS) {
-        // sendSMSAlert(
-        //     phone: settings.phone,
-        //     message:
-        //         "Porcentagem atual é $percent porcento para passar o limite MEI");
+        sendSMSAlert(
+            phone: settings.phone,
+            message:
+                "Porcentagem atual é $percent porcento para passar o limite MEI");
       }
     }
   }
