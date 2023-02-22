@@ -277,7 +277,9 @@ class _SignInPageState extends State<SignInPage> {
                         width: double.infinity,
                         margin: const EdgeInsets.only(top: 16),
                         child: TextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.pushNamed(context, Routes.signUp);
+                            },
                             child: const Text(
                                 "Ainda não tem conta? Crie uma agora!")),
                       )

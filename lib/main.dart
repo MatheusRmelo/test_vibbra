@@ -14,6 +14,7 @@ import 'package:vibbra_test/controllers/settings_controller.dart';
 import 'package:vibbra_test/firebase_options.dart';
 import 'package:vibbra_test/utils/routes.dart';
 import 'package:vibbra_test/views/auth/signin_dart.dart';
+import 'package:vibbra_test/views/auth/signup_page.dart';
 import 'package:vibbra_test/views/expenses/expenses_category_select_page.dart';
 import 'package:vibbra_test/views/expenses/expenses_company_select_page.dart';
 import 'package:vibbra_test/views/expenses/expenses_form_page.dart';
@@ -65,6 +66,7 @@ class MyApp extends StatelessWidget {
       routes: {
         Routes.home: (context) => const HomePage(),
         Routes.signIn: (context) => const SignInPage(),
+        Routes.signUp: (context) => const SignUpPage(),
         Routes.registerCompany: ((context) => const RegisterCompanyPage()),
         Routes.preferences: (context) => const PreferencesPage(),
         Routes.partnersForm: (context) => const FormPartnerPage(),
