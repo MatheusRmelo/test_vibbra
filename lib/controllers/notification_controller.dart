@@ -29,10 +29,10 @@ class NotificationController extends ChangeNotifier {
                 "Você pode emitir até ${settings.limit - totalInvoices} para continuar como MEI");
       }
       if (settings.alertSMS) {
-        sendSMSAlert(
-            phone: settings.phone,
-            message:
-                "Voce pode emitir ate ${settings.limit - totalInvoices} para continuar como MEI");
+        // sendSMSAlert(
+        //     phone: settings.phone,
+        //     message:
+        //         "Voce pode emitir ate ${settings.limit - totalInvoices} para continuar como MEI");
       }
     } else if (percent >= 80) {
       if (settings.alertEmail) {
@@ -42,20 +42,26 @@ class NotificationController extends ChangeNotifier {
                 "Porcentagem atual é $percent porcento para passar o limite MEI");
       }
       if (settings.alertSMS) {
-        sendSMSAlert(
-            phone: settings.phone,
-            message:
-                "Porcentagem atual é $percent porcento para passar o limite MEI");
+        // sendSMSAlert(
+        //     phone: settings.phone,
+        //     message:
+        //         "Porcentagem atual é $percent porcento para passar o limite MEI");
       }
     }
+  }
+
+  String _getBasicToken() {
+    String credentials =
+        "${APIConstants.clickSendUsername}:${APIConstants.clickSendKey}";
+    Codec<String, String> stringToBase64 = utf8.fuse(base64);
+    return stringToBase64.encode(credentials);
   }
 
   Future<bool> sendEmailAlert(
       {String subject = "Próximo ao limite de faturamento do MEI",
       String message =
           "Cuidado falta apenas 20 porcento para passar o limite MEI"}) async {
-    Uri url = Uri.parse(
-        '${APIConstants.mailTripUrl}/api/send/${APIConstants.mailTripInboxId}');
+    Uri url = Uri.parse('${APIConstants.clickSendUrl}/v3/email/send');
     http.Response result = await http.post(url,
         body: jsonEncode({
           "to": [
@@ -64,13 +70,15 @@ class NotificationController extends ChangeNotifier {
               "name": FirebaseAuth.instance.currentUser!.displayName
             }
           ],
-          "from": {"email": "vibbrateste@teste.com", "name": "Alerta MEI"},
+          "from": {
+            "email_address_id": APIConstants.clickSendEmailId,
+            "name": "Alerta MEI"
+          },
           "subject": subject,
-          "text": message,
-          "category": "API Test"
+          "body": message,
         }),
         headers: {
-          'Authorization': 'Bearer ${APIConstants.mailTripKey}',
+          'Authorization': 'Basic ${_getBasicToken()}',
           'Content-Type': 'application/json'
         });
     return result.statusCode == 200;
@@ -81,11 +89,6 @@ class NotificationController extends ChangeNotifier {
       String message =
           "Cuidado falta apenas 20 porcento para passar o limite MEI"}) async {
     Uri url = Uri.parse('${APIConstants.clickSendUrl}/v3/sms/send');
-    String credentials =
-        "${APIConstants.clickSendUsername}:${APIConstants.clickSendKey}";
-    Codec<String, String> stringToBase64 = utf8.fuse(base64);
-    String encoded = stringToBase64.encode(credentials);
-
     http.Response result = await http.post(url,
         body: jsonEncode({
           "messages": [
@@ -93,7 +96,7 @@ class NotificationController extends ChangeNotifier {
           ]
         }),
         headers: {
-          'Authorization': 'Basic $encoded',
+          'Authorization': 'Basic ${_getBasicToken()}',
           'Content-Type': 'application/json'
         });
     return result.statusCode == 200;
