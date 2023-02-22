@@ -46,6 +46,7 @@ dependencies:
   speed_dial_fab: ^2.3.0
   intl: ^0.17.0
   syncfusion_flutter_charts: ^20.4.51
+  http: ^0.13.5
 
 dev_dependencies:
   flutter_test:

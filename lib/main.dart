@@ -8,6 +8,7 @@ import 'package:vibbra_test/controllers/expense_controller.dart';
 import 'package:vibbra_test/controllers/histories_controller.dart';
 import 'package:vibbra_test/controllers/home_controller.dart';
 import 'package:vibbra_test/controllers/invoice_controller.dart';
+import 'package:vibbra_test/controllers/notification_controller.dart';
 import 'package:vibbra_test/controllers/partner_controller.dart';
 import 'package:vibbra_test/controllers/settings_controller.dart';
 import 'package:vibbra_test/firebase_options.dart';
@@ -43,6 +44,7 @@ void main() async {
       ChangeNotifierProvider(create: (_) => InvoiceController()),
       ChangeNotifierProvider(create: (_) => ExpenseController()),
       ChangeNotifierProvider(create: (_) => HistoriesController()),
+      ChangeNotifierProvider(create: (_) => NotificationController()),
     ],
     child: const MyApp(),
   ));

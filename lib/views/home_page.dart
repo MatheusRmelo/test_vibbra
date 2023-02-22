@@ -7,6 +7,7 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:syncfusion_flutter_charts/sparkcharts.dart';
 import 'package:vibbra_test/controllers/company_controller.dart';
 import 'package:vibbra_test/controllers/home_controller.dart';
+import 'package:vibbra_test/controllers/notification_controller.dart';
 import 'package:vibbra_test/models/expense.dart';
 import 'package:vibbra_test/models/invoice.dart';
 import 'package:vibbra_test/utils/routes.dart';
@@ -39,10 +40,13 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> initialize() async {
     setState(() => _isLoading = true);
-    var homeController = context.read<HomeController>();
-    await homeController.getInvoices(year: _year);
-    await homeController.getExpenses(year: _year);
-    await homeController.getSettings();
+    var controller = context.read<HomeController>();
+    var notificationController = context.read<NotificationController>();
+    await controller.getInvoices(year: _year);
+    await controller.getExpenses(year: _year);
+    await controller.getSettings();
+    notificationController.checkLimitMail(
+        invoices: controller.invoices, settings: controller.settings);
     setState(() => _isLoading = false);
   }
 

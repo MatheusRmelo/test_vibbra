@@ -18,6 +18,8 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
   TextEditingController limitController = TextEditingController(text: "81000");
+  TextEditingController phoneController = TextEditingController(text: "");
+
   bool _alertInEmail = false;
   bool _alertInSMS = false;
 
@@ -61,6 +63,19 @@ class _SettingsPageState extends State<SettingsPage> {
                         FilteringTextInputFormatter.digitsOnly,
                       ],
                       errors: controller.errors.errorsByCode("limit")),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  CustomOutlinedTextField(
+                      controller: phoneController,
+                      prefixIcon: const Icon(Icons.phone),
+                      label: "Telefone para alerta",
+                      placeholder: "Digite o seu telefone com DD",
+                      keyboardType: TextInputType.number,
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.digitsOnly,
+                      ],
+                      errors: controller.errors.errorsByCode("phone")),
                   Container(
                       margin: const EdgeInsets.symmetric(vertical: 16),
                       child: const Divider()),
@@ -101,6 +116,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                       .submit(SettingsVibbra(
                                           limit:
                                               int.parse(limitController.text),
+                                          phone: phoneController.text,
                                           alertEmail: _alertInEmail,
                                           alertSMS: _alertInSMS))
                                       .then((value) {
