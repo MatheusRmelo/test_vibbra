@@ -5,6 +5,7 @@ import 'package:vibbra_test/controllers/auth_controller.dart';
 import 'package:vibbra_test/controllers/company_controller.dart';
 import 'package:vibbra_test/controllers/expense_category_controller.dart';
 import 'package:vibbra_test/controllers/expense_controller.dart';
+import 'package:vibbra_test/controllers/histories_controller.dart';
 import 'package:vibbra_test/controllers/home_controller.dart';
 import 'package:vibbra_test/controllers/invoice_controller.dart';
 import 'package:vibbra_test/controllers/partner_controller.dart';
@@ -17,6 +18,7 @@ import 'package:vibbra_test/views/expenses/expenses_company_select_page.dart';
 import 'package:vibbra_test/views/expenses/expenses_form_page.dart';
 import 'package:vibbra_test/views/expenses/expenses_page.dart';
 import 'package:vibbra_test/views/expenses_categories/form_expense_category_page.dart';
+import 'package:vibbra_test/views/histories/histories_page.dart';
 import 'package:vibbra_test/views/home_page.dart';
 import 'package:vibbra_test/views/invoices/invoice_company_page.dart';
 import 'package:vibbra_test/views/invoices/invoice_form_page.dart';
@@ -40,6 +42,7 @@ void main() async {
       ChangeNotifierProvider(create: (_) => SettingsController()),
       ChangeNotifierProvider(create: (_) => InvoiceController()),
       ChangeNotifierProvider(create: (_) => ExpenseController()),
+      ChangeNotifierProvider(create: (_) => HistoriesController()),
     ],
     child: const MyApp(),
   ));
@@ -74,6 +77,7 @@ class MyApp extends StatelessWidget {
         Routes.expensesForm: (context) => const ExpensesFormPage(),
         Routes.expensesSelectCompany: (context) =>
             const ExpensesCompanySelectPage(),
+        Routes.histories: (context) => const HistoriesPage()
       },
     );
   }

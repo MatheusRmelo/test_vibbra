@@ -12,4 +12,5 @@ class Routes {
   static const String expensesSelectCategory = "/expenses_select_category";
   static const String expensesForm = "/expenses_form";
   static const String expensesSelectCompany = "/expenses_select_company";
+  static const String histories = "/histories";
 }

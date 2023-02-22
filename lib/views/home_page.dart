@@ -56,7 +56,11 @@ class _HomePageState extends State<HomePage> {
                       initialize();
                     },
                     icon: const Icon(Icons.refresh)),
-                IconButton(onPressed: () {}, icon: const Icon(Icons.restore)),
+                IconButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, Routes.histories);
+                    },
+                    icon: const Icon(Icons.restore)),
                 IconButton(
                     onPressed: () {
                       Navigator.pushNamed(context, Routes.preferences);
